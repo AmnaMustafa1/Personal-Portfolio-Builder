@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Builder Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(120deg, #ddfff7 0%, #93e1d8 50%, #ffa69e 50%);
+      color: #333;
+    }
+    .container {
+      width: 90%;
+      max-width: 800px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #007bff;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    textarea {
+      resize: none;
+    }
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>CV Builder</h1>
+    <form id="cvForm">
+      <!-- Name -->
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" id="name" placeholder="Enter your full name" required>
+      </div>
+
+      <!-- Profile Picture -->
+      <div class="form-group">
+        <label for="profileImage">Profile Picture:</label>
+        <input type="file" id="profileImage" accept="image/*" required>
+      </div>
+
+      <!-- Phone Number -->
+      <div class="form-group">
+        <label for="phone">Phone Number:</label>
+        <input type="text" id="phone" placeholder="Enter your phone number" required>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+      </div>
+
+      <!-- Profession -->
+      <div class="form-group">
+        <label for="profession">Profession:</label>
+        <input type="text" id="profession" placeholder="Enter your profession" required>
+      </div>
+
+      <!-- Skills -->
+      <div class="form-group">
+        <label for="skills">Skills:</label>
+        <input type="text" id="skills" placeholder="E.g., JavaScript, Python, Web Development" required>
+      </div>
+
+      <!-- Experience -->
+      <div class="form-group">
+        <label for="experience">Experience:</label>
+        <textarea id="experience" placeholder="Describe your professional experience" rows="4" required></textarea>
+      </div>
+
+      <!-- Education -->
+      <div class="form-group">
+        <label for="education">Education:</label>
+        <textarea id="education" placeholder="Your educational background" rows="4" required></textarea>
+      </div>
+
+      <!-- Certifications (Text input) -->
+      <div class="form-group">
+        <label for="certifications">Certifications:</label>
+        <input type="text" id="certifications" placeholder="List your certifications" required>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit">Generate CV</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("cvForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      // Save form data to localStorage
+      localStorage.setItem("name", document.getElementById("name").value);
+      localStorage.setItem("contactNumber", document.getElementById("phone").value);
+      localStorage.setItem("email", document.getElementById("email").value);
+      localStorage.setItem("profession", document.getElementById("profession").value);  // Save profession
+      localStorage.setItem("skills", document.getElementById("skills").value);
+      localStorage.setItem("experience", document.getElementById("experience").value);
+      localStorage.setItem("education", document.getElementById("education").value);
+      localStorage.setItem("certifications", document.getElementById("certifications").value);
+
+      // Save profile image to localStorage
+      const profileImageInput = document.getElementById("profileImage");
+      if (profileImageInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          localStorage.setItem("profileImage", event.target.result);
+        };
+        reader.readAsDataURL(profileImageInput.files[0]);
+      }
+
+      // Redirect to CV page
+      window.location.href = "cv.html";
+    });
+  </script>
+</body>
+</html>

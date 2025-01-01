@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(120deg, #ddfff7 0%, #93e1d8 50%, #ffa69e 50%);
+      color: #333;
+    }
+    .container {
+      width: 90%;
+      max-width: 900px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+    h1 {
+      text-align: center;
+      color: #4a90e2;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    .cv-section {
+      margin-bottom: 15px; /* Adjusted the bottom margin to reduce space between sections */
+      padding: 10px 20px;
+      border-left: 4px solid #4a90e2;
+      background: #f9f9f9;
+      border-radius: 8px;
+    }
+    .cv-section h3 {
+      margin-bottom: 5px; /* Reduced space after headings */
+      color: #333;
+      font-size: 1.5rem;
+    }
+    .cv-section p {
+      margin: 5px 0;
+      line-height: 1.8;
+      font-size: 1rem;
+      color: #555;
+    }
+    .button {
+      display: inline-block;
+      width: 200px;
+      margin: 10px auto;
+      padding: 10px;
+      background-color: #4a90e2;
+      color: white;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    .button:hover {
+      background-color: #357ab7;
+    }
+    .button-container {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Your CV</h1>
+    <div class="cv-section">
+      <h3>Personal Information</h3>
+      <p><strong>Name:</strong> <span id="cvName"></span></p>
+      <p><strong>Profession:</strong> <span id="cvProfession"></span></p>
+    </div>
+    <div class="cv-section">
+      <h3>Contact</h3>
+      <p><strong>Contact Number:</strong> <span id="cvContactNumber"></span></p>
+      <p><strong>Email:</strong> <span id="cvEmail"></span></p>
+    </div>
+    <div class="cv-section">
+      <h3>Profile Picture</h3>
+      <img id="cvProfilePicture" alt="Profile Picture" style="max-width: 150px; border-radius: 50%;">
+    </div>
+    <div class="cv-section">
+      <h3>Skills</h3>
+      <p><span id="cvSkills"></span></p>
+    </div>
+    <div class="cv-section">
+      <h3>Experience</h3>
+      <p><span id="cvExperience"></span></p>
+    </div>
+    <div class="cv-section">
+      <h3>Education</h3>
+      <p><span id="cvEducation"></span></p>
+    </div>
+    <div class="cv-section">
+      <h3>Certifications</h3>
+      <p><span id="cvCertifications"></span></p>
+    </div>
+    <div class="button-container">
+      <a href="index.html" class="button">Edit CV</a>
+      <button id="downloadPDF" class="button">Download PDF</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script>
+    // Populate CV data from localStorage
+    window.onload = function () {
+      document.getElementById("cvName").textContent = localStorage.getItem("name") || "N/A";
+      document.getElementById("cvProfession").textContent = localStorage.getItem("profession") || "N/A";
+      document.getElementById("cvContactNumber").textContent = localStorage.getItem("contactNumber") || "N/A";
+      document.getElementById("cvEmail").textContent = localStorage.getItem("email") || "N/A";
+      document.getElementById("cvSkills").textContent = localStorage.getItem("skills") || "N/A";
+      document.getElementById("cvExperience").textContent = localStorage.getItem("experience") || "N/A";
+      document.getElementById("cvEducation").textContent = localStorage.getItem("education") || "N/A";
+      document.getElementById("cvCertifications").textContent = localStorage.getItem("certifications") || "N/A";
+
+      // Load profile image if available
+      const profileImage = localStorage.getItem("profileImage");
+      if (profileImage) {
+        document.getElementById("cvProfilePicture").src = profileImage;
+      } else {
+        document.getElementById("cvProfilePicture").alt = "No Profile Picture Uploaded";
+      }
+    };
+
+    // Add functionality to download as PDF
+    document.getElementById("downloadPDF").addEventListener("click", function () {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      // Set document font and style
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(14);
+
+      // Add Name as Title
+      const name = localStorage.getItem("name") || "N/A";
+      doc.setFontSize(22);
+      doc.text(name, 105, 20, null, null, "center");
+
+      // Add Contact Details (center aligned)
+      const contactNumber = localStorage.getItem("contactNumber") || "N/A";
+      const email = localStorage.getItem("email") || "N/A";
+      let yPosition = 30; // Starting Y position for contact details
+
+      // Format contact details to be on separate lines like Experience
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("Contact Number:", 10, yPosition); // Title
+      yPosition += 10; // Increase space after title
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      doc.text(contactNumber, 10, yPosition); // Content
+      yPosition += 15; // Increase space for email
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("Email:", 10, yPosition); // Title
+      yPosition += 10; // Increase space after title
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      doc.text(email, 10, yPosition); // Content
+      yPosition += 15; // Space for next section
+
+      // Add Section Headers and Content with Formatting
+      let addSection = (title, content) => {
+        yPosition += 10; // Adjust position for each section
+        doc.setFontSize(14);
+        doc.setFont("helvetica", "bold");
+        doc.text(title, 10, yPosition); // Title
+        yPosition += 8; // Space between title and content
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "normal");
+        doc.text(content, 10, yPosition); // Content
+        yPosition += 10; // Add space after content for the next section
+      };
+
+      // Add skills as bullet points
+      const skills = (localStorage.getItem("skills") || "N/A").split(",");
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("Skills:", 10, yPosition);
+      yPosition += 8;
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      skills.forEach(skill => {
+        doc.text(`• ${skill.trim()}`, 10, yPosition);
+        yPosition += 6; // Move to the next line after each skill
+      });
+      yPosition += 10; // Space after skills section
+
+      // Add Experience
+      addSection("Experience:", localStorage.getItem("experience") || "N/A");
+
+      // Add Education
+      addSection("Education:", localStorage.getItem("education") || "N/A");
+
+      // Add Certifications as bullet points
+      const certifications = (localStorage.getItem("certifications") || "N/A").split(",");
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("Certifications:", 10, yPosition);
+      yPosition += 8;
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      certifications.forEach(cert => {
+        doc.text(`• ${cert.trim()}`, 10, yPosition);
+        yPosition += 6; // Move to the next line after each certification
+      });
+
+      // Save the document as a PDF with the person's name
+      doc.save(`${name}_cv.pdf`);
+    });
+  </script>
+
+</body>
+</html>
